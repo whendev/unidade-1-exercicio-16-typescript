@@ -1,9 +1,10 @@
 import { Loja } from "./loja"
 import { Produto } from "./produto";
 import { Item } from "./item";
+import { Pagamento } from "./pagamento";
 
 export class Venda {
-  constructor(private loja: Loja,private datahora: string, private ccf: string,private coo: string,private itens: Array<Item> = []){}
+  constructor(private loja: Loja,private datahora: string, private ccf: string,private coo: string,private itens: Array<Item> = [], private pagamento: Pagamento = null){}
 
   public isNullOrEmpty(s: String): boolean {
     return s == null || s.length == 0;
@@ -25,6 +26,10 @@ export class Venda {
     if (this.itens.length <= 0) {
       throw new Error(`Voce precisa adicionar itens a sua venda`);
     }
+
+    if (this.pagamento == null) {
+      throw new Error(`Voce precisa realizar o pagamento para imprimir o cupom`);
+    }
   }
 
   public valida_item(item: Number, produto: Produto, quantidade: number): void {
@@ -40,6 +45,23 @@ export class Venda {
 
     if (produto.getValorUnitario() <= 0) {
       throw new Error(`item não pode ser adicionado na venda com produto nesse estado`);
+    }
+  }
+
+  public pagar(valor: number, forma: number) {
+    if(forma == 0 || forma > 3){
+      throw new Error("Forma de pagamento invalida");
+    }
+    if(this.pagamento == null){
+      let valor_venda_total = this.calcular_total();
+      if(valor >= valor_venda_total){
+        this.pagamento = new Pagamento(valor, forma, valor_venda_total);
+      } else {
+        throw new Error("O valor da compra é maior que o pagamento!");
+      }
+      
+    } else {
+      throw new Error("Já existe um pagamento nesta venda");
     }
   }
 
@@ -77,10 +99,15 @@ export class Venda {
     let dadosLoja = this.loja.dados_loja();
     let dadosVenda = this.dadosVenda();
     let total = this.calcular_total().toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+    let dados_pagamento_forma = this.pagamento.get_forma_pagamento();
+    let dados_pagamento_valor = this.pagamento.get_valor_pagamento().toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+    let dados_pagamento_troco = this.pagamento.get_troco().toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 2 });
     return `${dadosLoja}------------------------------
 ${dadosVenda}
 CUPOM FISCAL
 ${this.dados_itens()}------------------------------
-TOTAL R$ ${total}`;
+TOTAL R$ ${total}
+${dados_pagamento_forma} ${dados_pagamento_valor}
+Troco R$ ${dados_pagamento_troco}`;
   }
 }
