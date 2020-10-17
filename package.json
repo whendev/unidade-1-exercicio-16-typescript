@@ -1,0 +1,27 @@
+{
+  "name": "unidade-1-exercicio-16-typescript",
+  "version": "1.0.0",
+  "description": "Exercicio 16 da disciplina de POO",
+  "scripts": {
+    "test": "jest --no-cache"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whendev/unidade-1-exercicio-16-typescript.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/whendev/unidade-1-exercicio-16-typescript/issues"
+  },
+  "homepage": "https://github.com/whendev/unidade-1-exercicio-16-typescript#readme",
+  "devDependencies": {
+    "jest": ">=25.1.0",
+    "ts-jest": ">=25.2.0",
+    "@types/jest": ">=25.1.2"
+  },
+  "dependencies": {
+    "typescript": "4.0.2"
+  }
+}
