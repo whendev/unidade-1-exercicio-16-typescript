@@ -14,11 +14,11 @@ export class Loja {
         return venda;
     }
 
-    public isNullOrEmpty(s: String): boolean {
+    private isNullOrEmpty(s: String): boolean {
         return s == null || s.length == 0;
     }
 
-    public validar_campos_obrigatorios(): void{
+    private validar_campos_obrigatorios(): void{
         if (this.nome_loja == "") {
             throw new Error(`O campo nome da loja é obrigatório`);
         }
